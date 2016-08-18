@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+    <title>Testbed for IE11 scrollIntoView fix</title>
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <script src="ie11-scroll-into-view.js"></script>
+    <style>
+        div {
+            margin: 0;
+            padding: 0;
+        }
+        .wrapper {
+            width: 120%;
+        }
+        .overflow-x-scroll {
+            width: 100%;
+            overflow-x: scroll;
+        }
+        .sections {
+            display: flex;
+        }
+        .section {
+            width: 33%;
+        }
+        .overflow-scroll {
+            display: block;
+            width: 100%;
+            height: 200px;
+            overflow-y: scroll;
+        }
+        .buttons {
+            display: block;
+            width: 100%;
+        }
+        button {
+            display: block;
+        }
+        #message {
+            padding: 10px;
+            font-size: 20px;
+            height: 40px;
+            border: 1px solid #999999;
+            background-color: #f6f6f6;
+        }
+        #message p {
+            margin: 0;
+        }
+        .message-ok {
+            color: green;
+        }
+        .message-error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h1>Testbed to reproduce IE 11 scrollIntoView() bug</h1>
+<div id="message">
+    <p>Click the "Scroll to top/bottom" buttons to trigger scrollIntoView() calls.</p>
+</div>
+<div class="overflow-x-scroll" id="horizontal-scroller">
+<div class="wrapper">
+<div class="sections">
+    <div class="section">
+        <div class="overflow-scroll">
+            <ol>
+                <li id="first-foo">Foo</li>
+                <li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li>
+                <li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li>
+                <li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li><li>Foo</li>
+                <li id="last-foo">Foo</li>
+            </ol>
+        </div>
+        <div class="buttons">
+            <button data-section="foo" data-to="first">Scroll to top</button>
+            <button data-section="foo" data-to="last">Scroll to bottom</button>
+        </div>
+    </div>
+    <div class="section">
+        <div class="overflow-scroll">
+            <ol>
+                <li id="first-bar">Bar</li>
+                <li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li>
+                <li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li>
+                <li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li><li>Bar</li>
+                <li id="last-bar">Bar</li>
+            </ol>
+        </div>
+        <div class="buttons">
+            <button data-section="bar" data-to="first">Scroll to top</button>
+            <button data-section="bar" data-to="last">Scroll to bottom</button>
+        </div>
+    </div>
+    <div class="section">
+        <div class="overflow-scroll">
+            <ol>
+                <li id="first-fox">Fox</li>
+                <li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li>
+                <li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li>
+                <li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li><li>Fox</li>
+                <li id="last-fox">Fox</li>
+            </ol>
+        </div>
+        <div class="buttons">
+            <button data-section="fox" data-to="first">Scroll to top</button>
+            <button data-section="fox" data-to="last">Scroll to bottom</button>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<script>
+    function getWrapperScrollLeft() {
+        return document.getElementById('horizontal-scroller').scrollLeft;
+    }
+
+    Array.prototype.slice.call(document.querySelectorAll('button')).forEach(function (button) {
+        button.addEventListener('click', function () {
+            var scrollLeftBefore = getWrapperScrollLeft();
+
+            var to = button.getAttribute('data-to') + '-' + button.getAttribute('data-section');
+            console.log('Jump to', to);
+            document.getElementById(to).scrollIntoView();
+
+            var scrollLeftAfter = getWrapperScrollLeft();
+
+            if (scrollLeftBefore === scrollLeftAfter) {
+                document.getElementById('message').innerHTML =
+                        '<p class="message-ok">Test passed: Behavior of scrollIntoView was like expected.</p>';
+            } else {
+                document.getElementById('message').innerHTML =
+                        '<p class="message-error">Test failed: the browser scrolled horizontally.</p>';
+            }
+        });
+    });
+</script>
+</body>
+</html>

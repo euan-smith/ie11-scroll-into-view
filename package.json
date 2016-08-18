@@ -1,0 +1,17 @@
+{
+  "name": "ie11-scroll-into-view",
+  "version": "1.0.0",
+  "description": "Polyfill/fix for scrollIntoView in IE 11",
+  "main": "ie11-scroll-into-view.js",
+  "scripts": {
+    "dev": "node dev.js"
+  },
+  "author": "tidal-engineering",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jquery": "^3.1.0"
+  },
+  "devDependencies": {
+    "express": "^4.14.0"
+  }
+}
