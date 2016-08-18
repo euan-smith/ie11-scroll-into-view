@@ -14,9 +14,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/tidal-engineering/i11-scroll-into-view.git"
+    "url": "https://github.com/tidal-engineering/ie11-scroll-into-view.git"
   },
-  "homepage": "https://github.com/tidal-engineering/i11-scroll-into-view",
+  "homepage": "https://github.com/tidal-engineering/ie11-scroll-into-view",
   "license": "Apache-2.0",
   "dependencies": {
     "jquery": "^3.1.0"
